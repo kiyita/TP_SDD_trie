@@ -63,11 +63,43 @@ void afficherTrie(TTrie t) {
     printf(")");
 }
 
+void afficherTrieMeilleur(TTrie t, int niveau) {
+    if (t == NULL) return;
+
+    // Affiche les frères d'abord (pour avoir un affichage du haut vers le bas)
+    afficherTrieMeilleur(t->fr, niveau);
+
+    // Indentation selon le niveau
+    for (int i = 0; i < niveau; i++) printf("    ");
+
+    // Affiche le caractère et la marque de fin de mot
+    printf("%c%s\n", t->val == '\0' ? '*' : t->val, t->m ? " [fin]" : "");
+
+    // Affiche les fils (niveau + 1)
+    afficherTrieMeilleur(t->fi, niveau + 1);
+}
+
+void supprimerTrie(TTrie *t) {
+    if (*t == NULL) return;
+
+    // Supprime les fils gauche et droit
+    supprimerTrie(&((*t)->fi));
+    supprimerTrie(&((*t)->fr));
+
+    // Libère la mémoire du nœud courant
+    free(*t);
+    *t = NULL; // Met le pointeur à NULL
+}
+
+
+// Fonction principale pour tester le trie
+
 void main() {
     TTrie t = NULL;
     ajoutTrie(&t, "hello");
     ajoutTrie(&t, "world");
     ajoutTrie(&t, "hi");
-    afficherTrie(t);
+    afficherTrieMeilleur(t, 0);
     printf("\n");
+    supprimerTrie(&t);
 }
