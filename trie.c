@@ -19,10 +19,12 @@ void ajoutTrie(TTrie *t, const char *s) {
         return;
     }
 
-    // Cas 1 : nœud actuel est NULL
-    if (*t == NULL) {
-        *t = creeTrie(); // Crée un nouveau nœud
-        (*t)->val = *s; // Assigne le caractère courant
+    // Cas 1 : nœud actuel est NULL Caractère courant plus petit
+    if (*t == NULL || (*t)->val > *s) {
+        TTrie nouveauNoeud = creeTrie(); // Crée un nouveau nœud
+        nouveauNoeud->val = *s;// Assigne le caractère courant
+        nouveauNoeud->fr = *t; // Le frère devient le nœud actuel
+        *t = nouveauNoeud;
         // On continue la récursion sur le fils gauche (caractère suivant)
         ajoutTrie(&((*t)->fi), s + 1);
         return;
@@ -73,7 +75,7 @@ void afficherTrieMeilleur(TTrie t, int niveau) {
     for (int i = 0; i < niveau; i++) printf("    ");
 
     // Affiche le caractère et la marque de fin de mot
-    printf("%c%s\n", t->val == '\0' ? '*' : t->val, t->m ? " [fin]" : "");
+    printf("%c%s\n", t->val == '\0' ? '*' : t->val, t->m ? " fin" : "");
 
     // Affiche les fils (niveau + 1)
     afficherTrieMeilleur(t->fi, niveau + 1);
@@ -99,6 +101,11 @@ void main() {
     ajoutTrie(&t, "hello");
     ajoutTrie(&t, "world");
     ajoutTrie(&t, "hi");
+    ajoutTrie(&t, "sauce");
+    ajoutTrie(&t, "saucisse");
+    ajoutTrie(&t, "saucisson");
+    ajoutTrie(&t, "sauvage");
+    ajoutTrie(&t, "saugrenu");
     afficherTrieMeilleur(t, 0);
     printf("\n");
     supprimerTrie(&t);
