@@ -96,7 +96,7 @@ void supprimerTrie(TTrie *t) {
 
 // Fonction principale pour tester le trie
 
-void main() {
+int main() {
     TTrie t = NULL;
     ajoutTrie(&t, "hello");
     ajoutTrie(&t, "world");
@@ -109,4 +109,5 @@ void main() {
     afficherTrieMeilleur(t, 0);
     printf("\n");
     supprimerTrie(&t);
+    return 0;
 }
