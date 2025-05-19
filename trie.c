@@ -9,41 +9,33 @@ TTrie creeTrie() {
     return t;
 }
 
-void ajoutTrie(TTrie t, char* s) {
-    //Cas de base : chaîne vide
+void ajoutTrie(TTrie *t, const char *s) {
+    // Cas de base : chaîne vide
     if (*s == '\0') {
-        t->m = true;//Marque la fin d'un mot
-    }
-
-    //Cas 1 : noeud actuel NULL
-    if (t->fi == NULL) {
-        TTrie nouveau = creeTrie();
-        nouveau->val = *s;
-        t->fi = nouveau;
-        ajoutTrie(t->fi, s + 1); //Appel récursif sur le reste du mot
-    }
-
-    //Cas 2 : noeud correspond au caractère courant
-    else if (t->fi->val == *s) {
-        ajoutTrie(t->fi, s + 1); //Appel récursif sur le reste du mot
-    }
-
-    //Cas 3 : noeud correspond à un autre caractère
-    else {
-        TTrie courant = t->fi;
-        while (courant->fr != NULL && courant->fr->val < *s) {
-            courant = courant->fr;
+        if (*t == NULL) { // Si le nœud est NULL, on le crée
+            *t = creeTrie();
         }
-        
-        if (courant->fr == NULL) {
-            // Si le noeud suivant est NULL, on crée un nouveau noeud
-            TTrie nouveau = creeTrie();
-            nouveau->val = *s;
-            courant->fr = nouveau;
-        }
-
-        ajoutTrie(courant->fr, s + 1); //Appel récursif sur le reste du mot
+        (*t)->m = true; // Marque la fin d'un mot
+        return;
     }
+
+    // Cas 1 : nœud actuel est NULL
+    if (*t == NULL) {
+        *t = creeTrie(); // Crée un nouveau nœud
+        (*t)->val = *s; // Assigne le caractère courant
+        // On continue la récursion sur le fils gauche (caractère suivant)
+        ajoutTrie(&((*t)->fi), s + 1);
+        return;
+    }
+
+    // Cas 2 : la valeur du nœud correspond au caractère courant
+    if ((*t)->val == *s) {
+        ajoutTrie(&((*t)->fi), s + 1); // On continue la récursion sur le fils gauche (caractère suivant)
+        return;
+    }
+
+    // Cas 3 : la valeur du nœud ne correspond pas au caractère courant
+    ajoutTrie(&((*t)->fr), s); // On continue la récursion sur le frère (caractère alternatif)
 }
 
 void afficherTrie(TTrie t) {
@@ -52,8 +44,12 @@ void afficherTrie(TTrie t) {
         return;
     }
 
-    // Affiche la racine
-    printf("(%c", t->val == '\0' ? ' ' : t->val);
+    // Affiche une oarenthèse et le caractère du nœud courant (ou un espace si c'est la racine)
+    if (t->val == '\0') {
+        printf("( ");
+    } else {
+        printf("(%c", t->val);
+    }
 
     // Affiche le fils gauche
     printf(", ");
@@ -68,10 +64,10 @@ void afficherTrie(TTrie t) {
 }
 
 void main() {
-    TTrie t = creeTrie();
-    ajoutTrie(t, "hello");
-    ajoutTrie(t, "world");
-    ajoutTrie(t, "hi");
+    TTrie t = NULL;
+    ajoutTrie(&t, "hello");
+    ajoutTrie(&t, "world");
+    ajoutTrie(&t, "hi");
     afficherTrie(t);
     printf("\n");
 }

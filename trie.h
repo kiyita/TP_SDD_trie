@@ -1,3 +1,6 @@
+#ifndef TRIE_H
+#define TRIE_H
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,3 +16,5 @@ struct snode {
     TTrie fi;
     TTrie fr;
 };
+
+#endif
