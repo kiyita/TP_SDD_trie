@@ -1,6 +1,7 @@
 #include "trie.h"
 
 TTrie creeTrie() {
+    // Crée un nœud de trie
     TTrie t = (TTrie)malloc(sizeof(Tnode));
     t->val = '\0';
     t->m = false;
@@ -10,6 +11,8 @@ TTrie creeTrie() {
 }
 
 void ajoutTrie(TTrie *t, const char *s) {
+    //Ajoute un mot au trie
+
     // Cas de base : chaîne vide
     if (*s == '\0') {
         if (*t == NULL) { // Si le nœud est NULL, on le crée
@@ -19,7 +22,7 @@ void ajoutTrie(TTrie *t, const char *s) {
         return;
     }
 
-    // Cas 1 : nœud actuel est NULL Caractère courant plus petit
+    // Cas 1 : nœud actuel est NULL Caractère courant plus petit - ordre alphabétique
     if (*t == NULL || (*t)->val > *s) {
         TTrie nouveauNoeud = creeTrie(); // Crée un nouveau nœud
         nouveauNoeud->val = *s;// Assigne le caractère courant
@@ -41,6 +44,7 @@ void ajoutTrie(TTrie *t, const char *s) {
 }
 
 void afficherTrie(TTrie t) {
+    // Affiche le trie sous forme d'arbre - affichage brut
     if (t == NULL) {
         printf("NULL");
         return;
@@ -66,6 +70,8 @@ void afficherTrie(TTrie t) {
 }
 
 void afficherTrieMeilleur(TTrie t, int niveau) {
+    // Affiche le trie sous forme d'arbre - affichage amélioré
+
     if (t == NULL) return;
 
     // Affiche les frères d'abord (pour avoir un affichage du haut vers le bas)
@@ -75,13 +81,15 @@ void afficherTrieMeilleur(TTrie t, int niveau) {
     for (int i = 0; i < niveau; i++) printf("    ");
 
     // Affiche le caractère et la marque de fin de mot
-    printf("%c%s\n", t->val == '\0' ? '*' : t->val, t->m ? " fin" : "");
+    printf("%c%s\n", t->val == '\0' ? '*' : t->val, t->m ? "fin" : "");
 
     // Affiche les fils (niveau + 1)
     afficherTrieMeilleur(t->fi, niveau + 1);
 }
 
 void supprimerTrie(TTrie *t) {
+    // Supprime le trie et libère la mémoire
+    
     if (*t == NULL) return;
 
     // Supprime les fils gauche et droit

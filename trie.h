@@ -17,4 +17,11 @@ struct snode {
     TTrie fr;
 };
 
+TTrie creeTrie();
+void ajoutTrie(TTrie *t, const char *s);
+void afficherTrie(TTrie t);
+void afficherTrieMeilleur(TTrie t, int niveau);
+void supprimerTrie(TTrie *t);
+int main();
+
 #endif
